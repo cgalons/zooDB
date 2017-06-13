@@ -9,10 +9,11 @@ namespace ZooApp.Controllers
 {
     public class ClasificacionController : ApiController
     {
+       
         // GET: api/Clasificacion
         public RespuestaAPI Get()
         {
-            RespuestaAPI respuesta = new RespuestaAPI();
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
             List<Clasificacion> dataClasificacion = new List<Clasificacion>();
             try
             {
@@ -21,60 +22,126 @@ namespace ZooApp.Controllers
                 {
                     dataClasificacion = Db.GetTablaClasificaciones();
                 }
-                respuesta.error = "";
+                respuestaAPI.error = "";
                 Db.Desconectar();
             }
             catch
             {
-                respuesta.totalElementos = 0;
-                respuesta.error = "Se produjo un error";
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Se produjo un error";
             }
 
-            respuesta.totalElementos = dataClasificacion.Count;
-            respuesta.dataClasificacion = dataClasificacion;
-            return respuesta;
+            respuestaAPI.totalData = dataClasificacion.Count;
+            respuestaAPI.dataClasificacion = dataClasificacion;
+            return respuestaAPI;
         }
 //-------------------------------------------------------------------------------------------------------------------
 
         // GET: api/Clasificacion/5
         public RespuestaAPI Get(long id)
         {
-            RespuestaAPI resultado = new RespuestaAPI();
-            List<Clasificacion> listaClasificacion = new List<Clasificacion>();
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            List<Clasificacion> dataClasificacion = new List<Clasificacion>();
             try
             {
                 Db.Conectar();
 
                 if (Db.EstaLaConexionAbierta())
                 {
-                    listaClasificacion = Db.GetClasificacionPorId(id);
+                    dataClasificacion = Db.GetClasificacionesPorId(id);
                 }
-                resultado.error = "";
+                respuestaAPI.error = "";
                 Db.Desconectar();
             }
             catch
             {
-                resultado.error = "Se produjo un error";
+                respuestaAPI.error = "Se produjo un error";
             }
 
-            resultado.totalElementos = listaClasificacion.Count;
-            resultado.dataClasificacion = listaClasificacion;
-            return resultado;
+            respuestaAPI.totalData = dataClasificacion.Count;
+            respuestaAPI.dataClasificacion = dataClasificacion;
+            return respuestaAPI;
         }
-//-------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------
+
         // POST: api/Clasificacion
-        public void Post([FromBody]string value)
+        [HttpPost]
+        public IHttpActionResult Post([FromBody] Clasificacion clasificacion)
         {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.AgregarClasificacion(clasificacion);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al agregar la clasificacion";
+            }
+
+            return Ok(respuestaAPI);
         }
 
+
+        //---------------------------------------------------------------------------------------------------------------------------------
         // PUT: api/Clasificacion/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public IHttpActionResult Put(int id, [FromBody]Clasificacion clasificacion)
         {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.ActualizarTablaClasificaciones(id, clasificacion);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al actualizar la clasificacion";
+            }
+            return Ok(respuestaAPI);
         }
+
+        //--------------------------------------------------------------------------------------------------------------------------
 
         // DELETE: api/Clasificacion/5
-        public void Delete(int id)
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
         {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.EliminarClasificacion(id);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al eliminar la clasificacion";
+            }
+            return Ok(respuestaAPI);
         }
     }
 }

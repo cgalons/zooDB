@@ -10,30 +10,135 @@ namespace ZooApp.Controllers
     public class EspecieController : ApiController
     {
         // GET: api/Especie
-        public IEnumerable<string> Get()
+        public RespuestaAPI Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            List<Especie> dataEspecie = new List<Especie>();
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    dataEspecie = Db.GetTablaEspecies();
+                }
+                respuestaAPI.error = "";
+                Db.Desconectar();
+            }
+            catch
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Se produjo un error";
+            }
 
+            respuestaAPI.totalData = dataEspecie.Count;
+            respuestaAPI.dataEspecie = dataEspecie;
+            return respuestaAPI;
+        }
+        //-------------------------------------------------------------------------------
         // GET: api/Especie/5
-        public string Get(int id)
+        public RespuestaAPI Get(long id)
         {
-            return "value";
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            List<Especie> dataEspecie = new List<Especie>();
+            try
+            {
+                Db.Conectar();
+
+                if (Db.EstaLaConexionAbierta())
+                {
+                    dataEspecie = Db.GetEspeciesPorId(id);
+                }
+                respuestaAPI.error = "";
+                Db.Desconectar();
+            }
+            catch
+            {
+                respuestaAPI.error = "Se produjo un error";
+            }
+
+            respuestaAPI.totalData = dataEspecie.Count;
+            respuestaAPI.dataEspecie = dataEspecie;
+            return respuestaAPI;
+        }
+        //---------------------------------------------------------------------------
+        // POST: api/Especie
+        [HttpPost]
+        public IHttpActionResult Post([FromBody] Especie especie)
+        {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.AgregarEspecies(especie);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al agregar la especie";
+            }
+
+            return Ok(respuestaAPI);
         }
 
-        // POST: api/Especie
-        public void Post([FromBody]string value)
-        {
-        }
+        //------------------------------------------------------------------------
 
         // PUT: api/Especie/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public IHttpActionResult Put(int id, [FromBody]Especie especie)
         {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.ActualizarTablaEspecies(id, especie);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al actualizar la especie";
+            }
+            return Ok(respuestaAPI);
         }
 
+        //-------------------------------------------------------------------------------
+
         // DELETE: api/Especie/5
-        public void Delete(int id)
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
         {
+            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            respuestaAPI.error = "";
+            int filasAfectadas = 0;
+            try
+            {
+                Db.Conectar();
+                if (Db.EstaLaConexionAbierta())
+                {
+                    filasAfectadas = Db.EliminarEspecie(id);
+                }
+                respuestaAPI.totalData = filasAfectadas;
+                Db.Desconectar();
+            }
+            catch (Exception ex)
+            {
+                respuestaAPI.totalData = 0;
+                respuestaAPI.error = "Error al eliminar la especie";
+            }
+            return Ok(respuestaAPI);
         }
     }
 }

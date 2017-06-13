@@ -7,7 +7,7 @@ namespace ZooApp
 {
     public class RespuestaAPI
     {
-        public int totalElementos { get; set; }
+        public int totalData { get; set; }
 
         public string error { get; set; }
 
