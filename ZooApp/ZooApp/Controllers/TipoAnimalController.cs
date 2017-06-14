@@ -91,7 +91,7 @@ namespace ZooApp.Controllers
         //--------------------------------------------------------------------------------------------------------------
         // PUT: api/TipoAnimal/5
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]TipoAnimal dataTipoAnimal)
+        public IHttpActionResult Put(int id, [FromBody]TipoAnimal tipoAnimal)
         {
             RespuestaAPI respuestaAPI = new RespuestaAPI();
             respuestaAPI.error = "";
@@ -101,7 +101,7 @@ namespace ZooApp.Controllers
                 Db.Conectar();
                 if (Db.EstaLaConexionAbierta())
                 {
-                    filasAfectadas = Db.ActualizarTablaTiposAnimal(id, dataTipoAnimal);
+                    filasAfectadas = Db.ActualizarTablaTiposAnimal(id, tipoAnimal);
                 }
                 respuestaAPI.totalData = filasAfectadas;
                 Db.Desconectar();

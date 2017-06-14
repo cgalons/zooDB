@@ -13,7 +13,7 @@ namespace ZooApp.Controllers
         // GET: api/Clasificacion
         public RespuestaAPI Get()
         {
-            RespuestaAPI respuestaAPI = new RespuestaAPI();
+            RespuestaAPI respuesta = new RespuestaAPI();
             List<Clasificacion> dataClasificacion = new List<Clasificacion>();
             try
             {
@@ -22,45 +22,45 @@ namespace ZooApp.Controllers
                 {
                     dataClasificacion = Db.GetTablaClasificaciones();
                 }
-                respuestaAPI.error = "";
+                respuesta.error = "";
                 Db.Desconectar();
             }
-            catch
+            catch (Exception ex)
             {
-                respuestaAPI.totalData = 0;
-                respuestaAPI.error = "Se produjo un error";
+                respuesta.totalData = 0;
+                respuesta.error = "Se produjo un error";
             }
 
-            respuestaAPI.totalData = dataClasificacion.Count;
-            respuestaAPI.dataClasificacion = dataClasificacion;
-            return respuestaAPI;
+            respuesta.totalData = dataClasificacion.Count;
+            respuesta.dataClasificacion = dataClasificacion;
+            return respuesta;
         }
 //-------------------------------------------------------------------------------------------------------------------
 
         // GET: api/Clasificacion/5
         public RespuestaAPI Get(long id)
         {
-            RespuestaAPI respuestaAPI = new RespuestaAPI();
+
+            RespuestaAPI respuesta = new RespuestaAPI();
             List<Clasificacion> dataClasificacion = new List<Clasificacion>();
             try
             {
                 Db.Conectar();
-
                 if (Db.EstaLaConexionAbierta())
                 {
                     dataClasificacion = Db.GetClasificacionesPorId(id);
+                    respuesta.error = "";
                 }
-                respuestaAPI.error = "";
                 Db.Desconectar();
             }
-            catch
+            catch (Exception ex)
             {
-                respuestaAPI.error = "Se produjo un error";
+                respuesta.error = "Error";
             }
+            respuesta.totalData = dataClasificacion.Count;
+            respuesta.dataClasificacion = dataClasificacion;
+            return respuesta;
 
-            respuestaAPI.totalData = dataClasificacion.Count;
-            respuestaAPI.dataClasificacion = dataClasificacion;
-            return respuestaAPI;
         }
         //-------------------------------------------------------------------------------------------------------------------------------
 

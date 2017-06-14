@@ -185,7 +185,7 @@ namespace ZooApp
             return listaClasificacion;
         }
 
-        public static List<Clasificacion> GetClasificacionesPorId(long idTipoAnimal)
+        public static List<Clasificacion> GetClasificacionesPorId(long id)
         {
             List<Clasificacion> listaClasificacion = new List<Clasificacion>();
 
@@ -193,9 +193,9 @@ namespace ZooApp
             SqlCommand comando = new SqlCommand(procedimiento, conexion);
             comando.CommandType = CommandType.StoredProcedure;
             SqlParameter parametroId = new SqlParameter();
-            parametroId.ParameterName = "idClasificacion";
+            parametroId.ParameterName = "idClasificacion";//Nombre parametro PA, no de la tabla ni parámetro función
             parametroId.SqlDbType = SqlDbType.BigInt;
-            parametroId.SqlValue = idTipoAnimal;
+            parametroId.SqlValue = id;
             comando.Parameters.Add(parametroId);
             SqlDataReader reader = comando.ExecuteReader();
             while (reader.Read())
@@ -204,6 +204,7 @@ namespace ZooApp
                 modelClasificacion.idClasificacion = (long)reader["idClasificacion"];
                 modelClasificacion.denominacionClasificacion = reader["denominacionClasificacion"].ToString();
                 listaClasificacion.Add(modelClasificacion);
+               
             }
 
             return listaClasificacion;
@@ -283,9 +284,9 @@ namespace ZooApp
                 Especie modelEspecie = new Especie();
                 modelEspecie.idEspecie = (long)reader["idEspecie"];
                 modelEspecie.clasificacion = new Clasificacion();
-                modelEspecie.clasificacion.idClasificacion = (long)reader["idClasificacion"];
+                modelEspecie.clasificacion.idClasificacion = (long)reader["idClasificacionTE"];
                 modelEspecie.tipoAnimal = new TipoAnimal();
-                modelEspecie.tipoAnimal.idTipoAnimal = (long)reader["idTipoAnimal"];
+                modelEspecie.tipoAnimal.idTipoAnimal = (long)reader["idTipoAnimalTE"];
                 modelEspecie.nombre = reader["nombre"].ToString();
                 modelEspecie.nPatas = (int)reader["nPatas"];
                 modelEspecie.esMascota = (bool)reader["esMascota"];
@@ -313,9 +314,9 @@ namespace ZooApp
                 Especie modelEspecie = new Especie();
                 modelEspecie.idEspecie = (long)reader["idEspecie"];
                 modelEspecie.clasificacion = new Clasificacion();
-                modelEspecie.clasificacion.idClasificacion = (long)reader["idClasificacion"];
+                modelEspecie.clasificacion.idClasificacion = (long)reader["idClasificacionTE"];
                 modelEspecie.tipoAnimal = new TipoAnimal();
-                modelEspecie.tipoAnimal.idTipoAnimal = (long)reader["idTipoAnimal"];
+                modelEspecie.tipoAnimal.idTipoAnimal = (long)reader["idTipoAnimalTE"];
                 modelEspecie.nombre = reader["nombre"].ToString();
                 modelEspecie.nPatas = (int)reader["nPatas"];
                 modelEspecie.esMascota = (bool)reader["esMascota"];

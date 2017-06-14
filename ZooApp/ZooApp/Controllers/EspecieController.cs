@@ -20,13 +20,14 @@ namespace ZooApp.Controllers
                 if (Db.EstaLaConexionAbierta())
                 {
                     dataEspecie = Db.GetTablaEspecies();
+                    respuestaAPI.error = "";
                 }
-                respuestaAPI.error = "";
+               
                 Db.Desconectar();
             }
-            catch
+            catch (Exception ex)
             {
-                respuestaAPI.totalData = 0;
+                //respuestaAPI.totalData = 0;
                 respuestaAPI.error = "Se produjo un error";
             }
 
@@ -91,7 +92,7 @@ namespace ZooApp.Controllers
 
         // PUT: api/Especie/5
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]Especie especie)
+        public IHttpActionResult Put(long id, [FromBody]Especie especie)
         {
             RespuestaAPI respuestaAPI = new RespuestaAPI();
             respuestaAPI.error = "";
