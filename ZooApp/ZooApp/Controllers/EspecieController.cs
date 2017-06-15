@@ -119,7 +119,7 @@ namespace ZooApp.Controllers
 
         // DELETE: api/Especie/5
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult Delete(long id)
         {
             RespuestaAPI respuestaAPI = new RespuestaAPI();
             respuestaAPI.error = "";

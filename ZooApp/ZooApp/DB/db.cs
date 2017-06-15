@@ -415,7 +415,7 @@ namespace ZooApp
             return filasAfectadas;
         }
 
-        public static int EliminarEspecie(long idTipoAnimal)
+        public static int EliminarEspecie(long idEspecie)
         {
             string procedimiento = "dbo.EliminarEspecie";
 
@@ -424,7 +424,7 @@ namespace ZooApp
             SqlParameter parametro = new SqlParameter();
             parametro.ParameterName = "idEspecie";
             parametro.SqlDbType = SqlDbType.BigInt;
-            parametro.SqlValue = idTipoAnimal;
+            parametro.SqlValue = idEspecie;
 
             comando.Parameters.Add(parametro);
             int filasAfectadas = comando.ExecuteNonQuery();
