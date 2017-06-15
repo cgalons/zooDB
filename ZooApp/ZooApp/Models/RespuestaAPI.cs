@@ -5,8 +5,10 @@ using System.Web;
 
 namespace ZooApp
 {
+    
     public class RespuestaAPI
     {
+       
         public int totalData { get; set; }
 
         public string error { get; set; }
